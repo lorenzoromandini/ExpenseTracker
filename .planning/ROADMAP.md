@@ -55,6 +55,22 @@ Each phase delivers a verifiable, testable capability that builds upon previous 
 - Privacy exposure: Secure storage implementation from day one
 - App size bloat: Minimal dependencies, tree-shaking enabled
 
+### Plans
+**Plans:** 4 plans in 3 waves
+
+Plans:
+- [x] 01-01-PLAN.md — Expo project setup with TypeScript, ESLint, and core dependencies
+- [x] 01-02-PLAN.md — Navigation structure with React Navigation 7 and auth screen stubs
+- [x] 01-03-PLAN.md — Database setup with expo-sqlite + Drizzle ORM and user schema
+- [x] 01-04-PLAN.md — i18n (Italian/English), theming (dark/light), secure storage, auth context
+
+### Wave Structure
+| Wave | Plans | Dependencies | Autonomous |
+|------|-------|--------------|------------|
+| 1 | 01-01 | None | Yes |
+| 2 | 01-02, 01-03 | 01-01 | Yes |
+| 3 | 01-04 | 01-01, 01-02, 01-03 | Yes |
+
 ---
 
 ## Phase 2: Core Expense Management
