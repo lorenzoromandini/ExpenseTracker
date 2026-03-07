@@ -1,0 +1,74 @@
+{
+  "common": {
+    "appName": "ExpenseTracker",
+    "loading": "Caricamento...",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "close": "Chiudi",
+    "continue": "Continua",
+    "back": "Indietro"
+  },
+  "auth": {
+    "login": "Accedi",
+    "register": "Crea Account",
+    "forgotPassword": "Password dimenticata?",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Conferma Password",
+    "createAccount": "Crea Account",
+    "signIn": "Accedi",
+    "welcome": "Benvenuto",
+    "resetPassword": "Reimposta Password",
+    "sendInstructions": "Invia Istruzioni",
+    "checkYourEmail": "Controlla la tua email per le istruzioni",
+    "onboardingTitle": "Traccia le Tue Spese",
+    "onboardingDescription": "Scansiona scontrini, gestisci budget e ottieni informazioni sulle tue spese."
+  },
+  "screens": {
+    "home": "Home",
+    "expenses": "Spese",
+    "budget": "Budget",
+    "settings": "Impostazioni"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "language": "Lingua",
+    "theme": "Tema",
+    "light": "Chiaro",
+    "dark": "Scuro",
+    "logout": "Esci",
+    "english": "Inglese",
+    "italian": "Italiano"
+  },
+  "validation": {
+    "required": "Richiesto",
+    "emailInvalid": "Email non valida",
+    "passwordShort": "Password minimo 8 caratteri",
+    "passwordsMatch": "Le password devono coincidere"
+  },
+  "scan": {
+    "scanReceipt": "Scansiona Scontrino",
+    "scanInstructions": "Allinea il codice QR nell'inquadratura",
+    "enterManually": "Inserisci Manualmente",
+    "invalidQR": "Codice QR Non Valido",
+    "qrNotReceipt": "Questo codice QR non sembra essere uno scontrino valido.",
+    "error": "Errore",
+    "processingError": "Impossibile elaborare il codice QR. Riprova.",
+    "processing": "Elaborazione scontrino...",
+    "success": "Successo",
+    "expenseSaved": "Spesa salvata con successo!",
+    "saveError": "Impossibile salvare la spesa. Riprova.",
+    "reviewExpense": "Rivedi Spesa",
+    "merchant": "Esercente",
+    "amount": "Importo",
+    "date": "Data",
+    "receiptNumber": "Numero Scontrino",
+    "retake": "Riscansiona",
+    "tryAgain": "Riprova",
+    "scanQR": "Scansiona QR",
+    "cameraPermission": "L'accesso alla fotocamera ti permette di scansionare gli scontrini",
+    "openSettings": "Apri Impostazioni"
+  }
+}

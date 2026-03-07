@@ -1,0 +1,74 @@
+{
+  "common": {
+    "appName": "ExpenseTracker",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "continue": "Continue",
+    "back": "Back"
+  },
+  "auth": {
+    "login": "Sign In",
+    "register": "Create Account",
+    "forgotPassword": "Forgot Password?",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "createAccount": "Create Account",
+    "signIn": "Sign In",
+    "welcome": "Welcome",
+    "resetPassword": "Reset Password",
+    "sendInstructions": "Send Instructions",
+    "checkYourEmail": "Check your email for instructions",
+    "onboardingTitle": "Track Your Expenses",
+    "onboardingDescription": "Scan receipts, manage budgets, and gain insights into your spending."
+  },
+  "screens": {
+    "home": "Home",
+    "expenses": "Expenses",
+    "budget": "Budget",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "logout": "Logout",
+    "english": "English",
+    "italian": "Italian"
+  },
+  "validation": {
+    "required": "Required",
+    "emailInvalid": "Invalid email",
+    "passwordShort": "Password must be 8+ characters",
+    "passwordsMatch": "Passwords must match"
+  },
+  "scan": {
+    "scanReceipt": "Scan Receipt",
+    "scanInstructions": "Align QR code within frame",
+    "enterManually": "Enter Manually",
+    "invalidQR": "Invalid QR Code",
+    "qrNotReceipt": "This QR code does not appear to be a valid receipt.",
+    "error": "Error",
+    "processingError": "Failed to process the QR code. Please try again.",
+    "processing": "Processing receipt...",
+    "success": "Success",
+    "expenseSaved": "Expense saved successfully!",
+    "saveError": "Failed to save expense. Please try again.",
+    "reviewExpense": "Review Expense",
+    "merchant": "Merchant",
+    "amount": "Amount",
+    "date": "Date",
+    "receiptNumber": "Receipt Number",
+    "retake": "Retake",
+    "tryAgain": "Try Again",
+    "scanQR": "Scan QR Code",
+    "cameraPermission": "Camera access lets you scan receipts",
+    "openSettings": "Open Settings"
+  }
+}

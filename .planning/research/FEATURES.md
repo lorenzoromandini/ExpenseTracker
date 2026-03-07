@@ -109,10 +109,11 @@ Features to explicitly NOT build.
 
 Minimum viable product — what's needed to validate the concept.
 
-- [ ] **Manual Expense Entry** — Core functionality, quick add with category
-- [ ] **15 Standard Categories** — Food, Transport, Utilities, Shopping, Healthcare, Entertainment, etc.
 - [ ] **Receipt Photo Capture** — Basic camera integration, store images
+- [ ] **QR Code Scanning** — Italy Scontrino Elettronico support (major EU differentiator)
 - [ ] **Basic OCR** — Extract amount, date, merchant (even if not perfect)
+- [ ] **Manual Expense Entry** — Fallback when OCR fails, quick add with category
+- [ ] **15 Standard Categories** — Food, Transport, Utilities, Shopping, Healthcare, Entertainment, etc.
 - [ ] **Monthly Budget per Category** — Simple limit with progress bar
 - [ ] **Spending Charts** — Monthly pie chart, category breakdown
 - [ ] **Offline Mode** — SQLite local storage, queue for sync
@@ -124,12 +125,11 @@ Minimum viable product — what's needed to validate the concept.
 
 Features to add once core is working and users are retained.
 
-- [ ] **QR Code Scanning** — Italy Scontrino Elettronico support (major EU differentiator)
 - [ ] **AI Smart Categorization** — ML model trained on user data
 - [ ] **Receipt Image Gallery** — Browse all receipt photos
 - [ ] **Recurring Expense Detection** — Auto-identify subscriptions
 - [ ] **Weekly Summary Notifications** — Engagement, spending digest
-- [ ] **Tags/Multiple Categories** — More flexible organization
+- [ ] **Tags/Filters** — More flexible organization
 - [ ] **Search & Advanced Filters** — Find expenses by date range, amount
 - [ ] **PDF Export** — Professional reports for accounting
 
@@ -150,9 +150,11 @@ Features to defer until product-market fit is established.
 
 | Feature | User Value | Implementation Cost | Priority |
 |---------|------------|---------------------|----------|
-| Manual Expense Entry | HIGH | LOW | P1 |
-| Basic Categories | HIGH | LOW | P1 |
 | Receipt Photo Capture | HIGH | MEDIUM | P1 |
+| QR Code Scanning | HIGH | HIGH | P1 |
+| Basic OCR | MEDIUM | MEDIUM | P1 |
+| Manual Expense Entry | HIGH | LOW | P2 |
+| Basic Categories | HIGH | LOW | P2 |
 | Basic OCR | MEDIUM | MEDIUM | P1 |
 | Monthly Budgeting | HIGH | MEDIUM | P1 |
 | Spending Charts | MEDIUM | MEDIUM | P1 |

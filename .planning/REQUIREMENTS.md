@@ -9,12 +9,11 @@
 
 ### Authentication & Onboarding
 
-- [ ] **AUTH-01**: User can launch app without mandatory signup (guest mode)
-- [ ] **AUTH-02**: User can create account with email and password
-- [ ] **AUTH-03**: User can log in with existing credentials
-- [ ] **AUTH-04**: User can reset password via email link
-- [ ] **AUTH-05**: User can enable cloud sync (optional) after account creation
-- [ ] **AUTH-06**: User can skip onboarding and start using app immediately
+- [ ] **AUTH-01**: User can create account with email and password
+- [ ] **AUTH-02**: User can log in with existing credentials
+- [ ] **AUTH-03**: User can reset password via email link
+- [ ] **AUTH-04**: User can enable cloud sync (optional) after account creation
+- [ ] **AUTH-05**: User can complete onboarding to start using app
 
 ### Core Expense Management
 

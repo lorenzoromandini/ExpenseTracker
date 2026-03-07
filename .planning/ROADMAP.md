@@ -30,23 +30,21 @@ Each phase delivers a verifiable, testable capability that builds upon previous 
 ### Dependencies
 - None (first phase)
 
-### Requirements (6)
+### Requirements (5)
 | ID | Requirement |
 |----|-------------|
-| AUTH-01 | User can launch app without mandatory signup (guest mode) |
-| AUTH-02 | User can create account with email and password |
-| AUTH-03 | User can log in with existing credentials |
-| AUTH-04 | User can reset password via email link |
-| AUTH-05 | User can enable cloud sync (optional) after account creation |
-| AUTH-06 | User can skip onboarding and start using app immediately |
+| AUTH-01 | User can create account with email and password |
+| AUTH-02 | User can log in with existing credentials |
+| AUTH-03 | User can reset password via email link |
+| AUTH-04 | User can enable cloud sync (optional) after account creation |
+| AUTH-05 | User can complete onboarding to start using app |
 
 ### Success Criteria
-1. **User can launch app** and immediately access guest mode without account creation
-2. **User can create account** with email/password and receive verification/confirmation
-3. **User can log in/out** and session persists across app restarts
-4. **User can reset password** via email link workflow
-5. **User can skip onboarding** and land directly on main expense view
-6. **App displays in Italian or English** based on device locale or manual selection
+1. **User can create account** with email/password and receive verification/confirmation
+2. **User can log in/out** and session persists across app restarts
+3. **User can reset password** via email link workflow
+4. **User can complete onboarding** and land on main expense view
+5. **App displays in Italian or English** based on device locale or manual selection
 
 ### Research Flag
 **Skip research** — Standard Expo setup patterns, well-documented SQLite/Drizzle integration.
@@ -73,14 +71,66 @@ Plans:
 
 ---
 
-## Phase 2: Core Expense Management
+## Phase 2: Receipt Capture & OCR
+
+**Goal:** Users can scan receipts via QR codes and camera photos with automatic data extraction.
+
+**Phase Rationale:** OCR receipt scanning is the primary differentiator (especially Italy Scontrino Elettronico QR support). Enables fast expense entry from receipts, which users prefer over manual entry. Complex camera/OCR integration requires dedicated phase.
+
+### Dependencies
+- Phase 1 (Foundation) — requires navigation, permissions framework, database
+
+### Requirements (9)
+| ID | Requirement |
+|----|-------------|
+| OCR-01 | User can scan QR codes on receipts (Italy Scontrino Elettronico) |
+| OCR-02 | User can capture receipt photo with camera |
+| OCR-03 | System extracts merchant name from receipt image |
+| OCR-04 | System extracts transaction date from receipt image |
+| OCR-05 | System extracts total amount from receipt image |
+| OCR-06 | System extracts VAT/tax amount if visible on receipt |
+| OCR-07 | User can review and edit extracted fields before saving |
+| OCR-08 | User can retry capture if extraction fails |
+| OCR-09 | System shows confidence score for OCR results |
+
+### Success Criteria
+1. **User can scan QR codes** on Italy Scontrino Elettronico receipts and extract data instantly
+2. **User can capture receipt photo** with camera interface (flash, focus, guides)
+3. **System extracts merchant name** from photo with confidence score displayed
+4. **System extracts transaction date** and total amount with confidence scoring
+5. **System extracts VAT/tax amount** when visible on receipt
+6. **User can review all extracted fields** in editable form before saving expense
+7. **User can retry capture** if OCR fails or confidence is low
+8. **System shows confidence scores** (high/medium/low) for each extracted field
+9. **OCR works offline** with on-device ML Kit processing
+10. **Camera permission requested contextually** (not at launch) with value explanation
+
+### Research Flag
+**COMPLETE** — See `.planning/research/phase-02-ocr.md`
+
+Research completed 2026-03-07 covering:
+- Camera libraries: expo-camera (QR), react-native-vision-camera (OCR)
+- OCR engines: Google ML Kit (on-device, recommended), Tesseract.js (fallback)
+- Italy's Scontrino Elettronico QR format and parsing strategy
+- Two-phase implementation: QR first (Expo Go), OCR second (requires dev client)
+
+### Critical Pitfalls to Avoid
+- OCR accuracy degradation: Implement pre-capture validation, confidence scoring, manual correction workflow
+- Camera permission death spiral: Request contextually, show value first, provide manual fallback
+- Battery drain: Process OCR efficiently, use background tasks appropriately
+- App size bloat: Make on-device OCR model optional download
+
+---
+
+## Phase 3: Core Expense Management
 
 **Goal:** Users can track expenses manually with categories, tags, and multi-currency support.
 
-**Phase Rationale:** Manual entry is the primary use case (Italy has high cash usage). Categories and currency support are table stakes for EU market.
+**Phase Rationale:** Manual entry serves as fallback when OCR fails or for cash expenses. Categories and currency support are table stakes for EU market. Built after OCR so users have both options.
 
 ### Dependencies
 - Phase 1 (Foundation) — requires database, navigation, authentication state
+- Phase 2 (Receipt OCR) — shares expense data model, manual entry is OCR fallback
 
 ### Requirements (23)
 | ID | Requirement |
@@ -129,15 +179,15 @@ Plans:
 
 ---
 
-## Phase 3: Budgeting
+## Phase 4: Budgeting
 
 **Goal:** Users can set and track monthly budgets per category with clear progress visualization.
 
-**Phase Rationale:** Budgeting is a core value proposition. Requires expenses (Phase 2) to function, but is a distinct user workflow that needs dedicated focus.
+**Phase Rationale:** Budgeting is a core value proposition. Requires expenses (Phase 3) to function, but is a distinct user workflow that needs dedicated focus.
 
 ### Dependencies
 - Phase 1 (Foundation) — requires authentication, database
-- Phase 2 (Core Expense Management) — requires expenses, categories to track against budgets
+- Phase 3 (Core Expense Management) — requires expenses, categories to track against budgets
 
 ### Requirements (8)
 | ID | Requirement |
@@ -164,16 +214,16 @@ Plans:
 
 ---
 
-## Phase 4: Dashboard & AI Insights
+## Phase 5: Dashboard & AI Insights
 
 **Goal:** Users can visualize spending patterns and receive personalized AI-powered savings suggestions.
 
-**Phase Rationale:** Requires sufficient expense history (from Phases 2-3) to generate meaningful insights. Charts and AI differentiate the app from basic trackers.
+**Phase Rationale:** Requires sufficient expense history (from Phases 2-4) to generate meaningful insights. Charts and AI differentiate the app from basic trackers.
 
 ### Dependencies
 - Phase 1 (Foundation) — database, navigation
-- Phase 2 (Core Expense Management) — expenses, categories for data to visualize
-- Phase 3 (Budgeting) — budget data for insights
+- Phase 3 (Core Expense Management) — expenses, categories for data to visualize
+- Phase 4 (Budgeting) — budget data for insights
 
 ### Requirements (14)
 | ID | Requirement |
@@ -216,52 +266,6 @@ Plans:
 
 ---
 
-## Phase 5: Receipt Capture & OCR
-
-**Goal:** Users can scan receipts via QR codes and camera photos with automatic data extraction.
-
-**Phase Rationale:** The key differentiator (especially Italy Scontrino Elettronico QR support). Complex camera/OCR integration requires dedicated phase.
-
-### Dependencies
-- Phase 1 (Foundation) — navigation, permissions framework
-- Phase 2 (Core Expense Management) — expense creation, categories to populate from OCR
-
-### Requirements (9)
-| ID | Requirement |
-|----|-------------|
-| OCR-01 | User can scan QR codes on receipts (Italy Scontrino Elettronico) |
-| OCR-02 | User can capture receipt photo with camera |
-| OCR-03 | System extracts merchant name from receipt image |
-| OCR-04 | System extracts transaction date from receipt image |
-| OCR-05 | System extracts total amount from receipt image |
-| OCR-06 | System extracts VAT/tax amount if visible on receipt |
-| OCR-07 | User can review and edit extracted fields before saving |
-| OCR-08 | User can retry capture if extraction fails |
-| OCR-09 | System shows confidence score for OCR results |
-
-### Success Criteria
-1. **User can scan QR codes** on Italy Scontrino Elettronico receipts and extract data instantly
-2. **User can capture receipt photo** with camera interface (flash, focus, guides)
-3. **System extracts merchant name** from photo with confidence score displayed
-4. **System extracts transaction date** and total amount with confidence scoring
-5. **System extracts VAT/tax amount** when visible on receipt
-6. **User can review all extracted fields** in editable form before saving expense
-7. **User can retry capture** if OCR fails or confidence is low
-8. **System shows confidence scores** (high/medium/low) for each extracted field
-9. **OCR works offline** with on-device ML Kit processing
-10. **Camera permission requested contextually** (not at launch) with value explanation
-
-### Research Flag
-**Needs research** — OCR accuracy tuning, ML Kit configuration, Italian receipt parsing patterns. Schedule `/gsd-research-phase` before planning.
-
-### Critical Pitfalls to Avoid
-- OCR accuracy degradation: Implement pre-capture validation, confidence scoring, manual correction workflow
-- Camera permission death spiral: Request contextually, show value first, provide manual fallback
-- Battery drain: Process OCR efficiently, use background tasks appropriately
-- App size bloat: Make on-device OCR model optional download
-
----
-
 ## Phase 6: Offline-First & Sync
 
 **Goal:** Users can use app fully offline with automatic cloud sync when connected.
@@ -270,8 +274,8 @@ Plans:
 
 ### Dependencies
 - Phase 1 (Foundation) — database, authentication
-- Phase 2 (Core Expense Management) — expense data model, categories
-- Phase 5 (Receipt Capture) — offline OCR processing
+- Phase 3 (Core Expense Management) — expense data model, categories
+- Phase 2 (Receipt Capture) — offline OCR processing
 
 ### Requirements (15)
 | ID | Requirement |
@@ -319,11 +323,11 @@ Plans:
 
 **Goal:** Users receive timely budget alerts and weekly spending summaries via push notifications.
 
-**Phase Rationale:** Engagement and retention feature. Requires budgets (Phase 3) and spending data to trigger meaningful alerts.
+**Phase Rationale:** Engagement and retention feature. Requires budgets (Phase 4) and spending data to trigger meaningful alerts.
 
 ### Dependencies
 - Phase 1 (Foundation) — push notification infrastructure
-- Phase 3 (Budgeting) — budget thresholds to monitor
+- Phase 4 (Budgeting) — budget thresholds to monitor
 - Phase 6 (Offline-First) — local notification scheduling
 
 ### Requirements (6)
@@ -362,8 +366,8 @@ Plans:
 
 ### Dependencies
 - Phase 1 (Foundation) — file system access, sharing
-- Phase 2 (Core Expense Management) — expense data to export
-- Phase 3 (Budgeting) — budget data for reports
+- Phase 3 (Core Expense Management) — expense data to export
+- Phase 4 (Budgeting) — budget data for reports
 
 ### Requirements (6)
 | ID | Requirement |
@@ -398,6 +402,9 @@ Plans:
 
 ### Dependencies
 - All previous phases — settings control features from across the app
+- Phase 2 (OCR) — camera settings
+- Phase 3 (Core) — default categories, currency
+- Phase 4 (Budget) — notification preferences
 
 ### Requirements (6)
 | ID | Requirement |
@@ -465,11 +472,11 @@ Phase 1: Foundation
 
 | Category | Phase | Requirement IDs | Count |
 |----------|-------|-----------------|-------|
-| Authentication | Phase 1 | AUTH-01 to AUTH-06 | 6 |
-| Core + Categories + Currency | Phase 2 | CORE-01 to CORE-07, CAT-01 to CAT-09, CURR-01 to CURR-07 | 23 |
-| Budgeting | Phase 3 | BDGT-01 to BDGT-08 | 8 |
-| Reports + AI | Phase 4 | RPT-01 to RPT-08, AI-01 to AI-06 | 14 |
-| Receipt OCR | Phase 5 | OCR-01 to OCR-09 | 9 |
+| Authentication | Phase 1 | AUTH-01 to AUTH-05 | 5 |
+| Receipt OCR | Phase 2 | OCR-01 to OCR-09 | 9 |
+| Core + Categories + Currency | Phase 3 | CORE-01 to CORE-07, CAT-01 to CAT-09, CURR-01 to CURR-07 | 23 |
+| Budgeting | Phase 4 | BDGT-01 to BDGT-08 | 8 |
+| Reports + AI | Phase 5 | RPT-01 to RPT-08, AI-01 to AI-06 | 14 |
 | Offline + Sync | Phase 6 | OFF-01 to OFF-08, SYNC-01 to SYNC-07 | 15 |
 | Notifications | Phase 7 | NOTF-01 to NOTF-06 | 6 |
 | Data Export | Phase 8 | EXP-01 to EXP-06 | 6 |
@@ -479,8 +486,8 @@ Phase 1: Foundation
 
 | Metric | Value |
 |--------|-------|
-| **Total v1 Requirements** | 93 |
-| **Requirements Mapped** | 93 |
+| **Total v1 Requirements** | 92 |
+| **Requirements Mapped** | 92 |
 | **Orphaned Requirements** | 0 ✓ |
 | **Duplicate Mappings** | 0 ✓ |
 | **Coverage** | 100% ✓ |
@@ -488,10 +495,10 @@ Phase 1: Foundation
 ### Verification
 
 - ✓ All AUTH requirements → Phase 1
-- ✓ All CORE, CAT, CURR requirements → Phase 2
-- ✓ All BDGT requirements → Phase 3
-- ✓ All RPT, AI requirements → Phase 4
-- ✓ All OCR requirements → Phase 5
+- ✓ All OCR requirements → Phase 2
+- ✓ All CORE, CAT, CURR requirements → Phase 3
+- ✓ All BDGT requirements → Phase 4
+- ✓ All RPT, AI requirements → Phase 5
 - ✓ All OFF, SYNC requirements → Phase 6
 - ✓ All NOTF requirements → Phase 7
 - ✓ All EXP requirements → Phase 8
@@ -503,11 +510,11 @@ Phase 1: Foundation
 
 | Phase | Status | Date Started | Date Completed | Requirements Complete |
 |-------|--------|--------------|----------------|----------------------|
-| 1 - Foundation | 🔵 Planned | — | — | 0/6 |
-| 2 - Core Expense | ⚪ Not Started | — | — | 0/23 |
-| 3 - Budgeting | ⚪ Not Started | — | — | 0/8 |
-| 4 - Dashboard & AI | ⚪ Not Started | — | — | 0/14 |
-| 5 - Receipt OCR | ⚪ Not Started | — | — | 0/9 |
+| 1 - Foundation | 🔵 Planned | — | — | 0/5 |
+| 2 - Receipt OCR | ⚪ Not Started | — | — | 0/9 |
+| 3 - Core Expense | ⚪ Not Started | — | — | 0/23 |
+| 4 - Budgeting | ⚪ Not Started | — | — | 0/8 |
+| 5 - Dashboard & AI | ⚪ Not Started | — | — | 0/14 |
 | 6 - Offline & Sync | ⚪ Not Started | — | — | 0/15 |
 | 7 - Notifications | ⚪ Not Started | — | — | 0/6 |
 | 8 - Data Export | ⚪ Not Started | — | — | 0/6 |
@@ -526,13 +533,13 @@ Phase 1: Foundation
 
 1. **Foundation First:** Security, i18n, and database schema are architectural foundations. Expensive to change later.
 
-2. **Manual Entry Before OCR:** Italy has high cash usage—manual entry is primary use case. OCR is convenience feature requiring significant UX investment (permissions, correction workflows).
+2. **OCR Before Manual Entry:** OCR receipt scanning is the key differentiator (especially Italy Scontrino Elettronico QR support). Users prefer scanning receipts over manual entry. Manual entry serves as fallback when OCR fails.
 
 3. **Categories Before Budgets:** Budgets need categories to track against. Natural dependency.
 
 4. **Budgets Before AI Insights:** AI needs spending history and budget context to generate meaningful suggestions.
 
-5. **Core Features Before OCR:** Receipt capture built on expense creation from Phase 2. Share data models and validation logic.
+5. **OCR Shares Data Model with Manual Entry:** Both create expenses using same schema. Building OCR first establishes the expense data model that manual entry will also use.
 
 6. **Offline Before Sync:** Users expect offline functionality; sync is value-add. Building sync on working offline architecture is easier than retrofitting offline into cloud-first app.
 
@@ -548,12 +555,12 @@ Phase 1: Foundation
 
 | Phase | Research Needed | Topics |
 |-------|-----------------|--------|
-| 4 - Dashboard & AI | YES | ML categorization model, spending pattern analysis |
-| 5 - Receipt OCR | YES | OCR accuracy tuning, ML Kit config, Italian receipt parsing |
+| 2 - Receipt OCR | YES | OCR accuracy tuning, ML Kit config, Italian receipt parsing |
+| 5 - Dashboard & AI | YES | ML categorization model, spending pattern analysis |
 | 6 - Offline & Sync | YES | Conflict resolution strategies (CRDTs), UUID patterns |
-| 1, 2, 3, 7, 8, 9 | NO | Standard patterns well-documented |
+| 1, 3, 4, 7, 8, 9 | NO | Standard patterns well-documented |
 
-**Action:** Schedule `/gsd-research-phase` before planning phases 4, 5, and 6.
+**Action:** Schedule `/gsd-research-phase` before planning phases 2, 5, and 6.
 
 ---
 
@@ -561,17 +568,17 @@ Phase 1: Foundation
 
 | Phase | Criteria Count | Key Observable Behaviors |
 |-------|----------------|--------------------------|
-| 1 | 6 | Launch, signup, login, password reset, skip onboarding, localization |
-| 2 | 9 | Add/edit/delete expenses, browse history, search/filter, categories, tags, multi-currency |
-| 3 | 6 | Set budgets, track progress, view overview, disable categories, visual alerts |
-| 4 | 12 | Dashboard, bar/pie/trend charts, time switching, top categories, AI insights, savings suggestions |
-| 5 | 10 | QR scanning, photo capture, OCR extraction, confidence scores, manual correction, offline processing |
+| 1 | 5 | Launch, signup, login, password reset, localization |
+| 2 | 10 | QR scanning, photo capture, OCR extraction, confidence scores, manual correction, offline processing |
+| 3 | 9 | Add/edit/delete expenses, browse history, search/filter, categories, tags, multi-currency |
+| 4 | 6 | Set budgets, track progress, view overview, disable categories, visual alerts |
+| 5 | 12 | Dashboard, bar/pie/trend charts, time switching, top categories, AI insights, savings suggestions |
 | 6 | 12 | Full offline mode, queue sync, auto/manual sync, multi-device, conflict resolution, encryption |
 | 7 | 7 | Budget alerts (80%/100%), weekly summary, toggle types, set time, offline scheduling |
 | 8 | 8 | CSV export, PDF reports, date range, category filter, device storage, share sheet |
 | 9 | 8 | Language switch, dark/light mode, system theme, currency change, clear data, version info |
 
-**Total Success Criteria:** 78
+**Total Success Criteria:** 77
 
 ---
 
